@@ -4,6 +4,9 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 
 
+require('dotenv').config();
+
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -11,22 +14,30 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 
 
+// SIMPLE NODEMAILER EXAMPLE
+// https://nodemailer.com/about/
+
+
 
 // ROUTES
-app.get('/', (req, res, next)=>{
-    res.send("welcome to my froma");
-});
 app.post("/api/forma", (req, res, next)=>{
+    // WE CAN GET DATA FROM POSTMAN OR REACTJS 
     let data = req.body;
     console.log(data);
 
 
+    // https://nodemailer.com/smtp/#2-pooled-connections
     let smtpTransport = nodemailer.createTransport({
         service: 'gmail',
         // port: 456,
+
+        // auth is the authentication object
+        // type indicates the authetication type, defaults to ‘login’, other option is ‘oauth2’
+        // user is the username 
+        // pass is the password for the user if normal login is used
         auth:{
             user: data.email,
-            pass: 'S-bba-5222-44'
+            pass: process.env.PASSWORD
         }
     });
 
@@ -71,5 +82,7 @@ app.post("/api/forma", (req, res, next)=>{
 })
 
 
-app.listen(3001, ()=>console.log("server is running on port 3001"));
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, ()=>console.log("server is running on port 3001"));
 
