@@ -14,7 +14,7 @@ app.use(cors());
 
 // ROUTES
 app.get('/', (req, res, next)=>{
-    res.send("elcome to my froma");
+    res.send("welcome to my froma");
 });
 app.post("/api/forma", (req, res, next)=>{
     let data = req.body;
@@ -22,11 +22,11 @@ app.post("/api/forma", (req, res, next)=>{
 
 
     let smtpTransport = nodemailer.createTransport({
-        service: 'Gmail',
-        port: 456,
+        service: 'gmail',
+        // port: 456,
         auth:{
-            user: 'mdshayon@hotmail.com',
-            pass: 'Shayon1234'
+            user: data.email,
+            pass: 'S-bba-5222-44'
         }
     });
 
@@ -34,8 +34,9 @@ app.post("/api/forma", (req, res, next)=>{
 
     let mailOptions = {
         from : data.email,
+        // https://myaccount.google.com/lesssecureapps?pli=1
         to: 'mdshayon0@gmail.com',
-        subject: `Message from ${data.name}`,
+        subject: `Message from ${data.firstName} ${data.lastName}`,
         html: `
             <h3>informations</h3>
             <ul>
@@ -57,9 +58,11 @@ app.post("/api/forma", (req, res, next)=>{
 
     smtpTransport.sendMail(mailOptions, (error, response)=>{
         if(error){
+            console.log("Error", error);
             res.send(error);
         }else{
-            res.send("success");
+            console.log("Email sent");
+            res.send("Success");
         }
     });
 
